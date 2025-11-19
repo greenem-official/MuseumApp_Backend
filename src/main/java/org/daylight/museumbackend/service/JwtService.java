@@ -25,16 +25,22 @@ public class JwtService {
     }
 
     public String extractUsername(String token) {
-        return Jwts.parser()
-                .verifyWith(key)
-                .build()
-                .parseSignedClaims(token)
-                .getPayload()
-                .getSubject();
+        try {
+            return Jwts.parser()
+                    .verifyWith(key)
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload()
+                    .getSubject();
+        } catch (io.jsonwebtoken.security.SignatureException |
+                 io.jsonwebtoken.ExpiredJwtException |
+                 io.jsonwebtoken.MalformedJwtException e) {
+            return null;
+        }
     }
 
     public boolean validate(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
-        return username.equals(userDetails.getUsername());
+        return username != null && username.equals(userDetails.getUsername());
     }
 }

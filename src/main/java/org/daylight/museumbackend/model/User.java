@@ -20,7 +20,7 @@ public class User {
     @Column(length = 100)
     private String fullName;
 
-    @Enumerated(EnumType.STRING)
     @Column(length = 30, nullable = false)
+    @Convert(converter = UserRole.UserRoleConverter.class)
     private UserRole role;
 }

@@ -1,0 +1,23 @@
+services:
+  museum_backend_dev_postgres:
+    image: postgres:latest
+    container_name: museum_backend_dev_postgres_container
+    restart: always
+    ports:
+      - "5300:5432"
+    environment:
+      POSTGRES_USER: ivan
+      POSTGRES_PASSWORD: "123456"
+      POSTGRES_DB: maindb
+      POSTGRES_DATA: /var/lib/postgresql/data
+    networks:
+      - museum_backend_dev_network
+    volumes:
+      - museum_backend_dev_postgres_volume:/var/lib/postgresql/data
+#      - ./postgres_data/initial_postgres_data.sql:/docker-entrypoint-initdb.d/init.sql
+
+networks:
+  museum_backend_dev_network:
+
+volumes:
+  museum_backend_dev_postgres_volume:

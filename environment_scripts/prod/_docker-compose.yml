@@ -1,0 +1,42 @@
+services:
+  museum_backend_prod_postgres:
+    image: postgres:latest
+    container_name: museum_backend_prod_postgres
+    restart: always
+    ports:
+      - "5402:5432"
+    environment:
+      POSTGRES_USER: ivan
+      POSTGRES_PASSWORD: "123456"
+      POSTGRES_DB: maindb
+    networks:
+      - museum_backend_prod_network
+    volumes:
+      - museum_backend_prod_postgres_volume:/var/lib/postgresql/data
+      - ./postgres_data/initial_postgres_data.sql:/docker-entrypoint-initdb.d/init.sql
+
+  museum_backend_prod_backend:
+    image: d4ylight/museum_backend:latest  # Doesn't exist yet
+    container_name: museum_backend_prod
+    restart: always
+    depends_on:
+      - museum_backend_prod_postgres
+    networks:
+      - museum_backend_prod_network
+    environment:
+      SPRING_PROFILES_ACTIVE: postgresql  # choose [postgresql | sqlite]
+      DB_HOST: museum_backend_prod_postgres
+      DB_PORT: 5432
+      DB_NAME: maindb
+      DB_USER: ivan
+      DB_PASSWORD: 123456
+    volumes:
+      - museum_backend_prod_volume:/var/lib/museum_backend_prod/
+
+networks:
+  museum_backend_prod_network:
+
+volumes:
+  museum_backend_prod_postgres_volume:
+  museum_backend_prod_volume:
+  museum_backend_prod_frontend_volume:

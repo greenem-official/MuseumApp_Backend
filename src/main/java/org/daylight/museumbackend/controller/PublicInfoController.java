@@ -1,7 +1,11 @@
 package org.daylight.museumbackend.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.daylight.museumbackend.dto.PublicStatsDto;
 import org.daylight.museumbackend.model.Item;
+import org.daylight.museumbackend.repository.AuthorRepository;
+import org.daylight.museumbackend.repository.CollectionRepository;
+import org.daylight.museumbackend.repository.HallRepository;
 import org.daylight.museumbackend.repository.ItemRepository;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -19,15 +23,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PublicInfoController {
     private final ItemRepository itemRepository;
+    private final CollectionRepository collectionRepository;
+    private final HallRepository hallRepository;
+    private final AuthorRepository authorRepository;
 
     @PreAuthorize("hasRole('ANONYMOUS') or hasRole('VISITOR')")
-    @GetMapping("/info")
-    public String publicInfo() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println("AUTH IN CONTROLLER:");
-        System.out.println("Principal: " + auth.getPrincipal());
-        System.out.println("Authorities: " + auth.getAuthorities());
-        System.out.println("Authenticated: " + auth.isAuthenticated());
-        return "A";
+    @GetMapping("/general_stats")
+    public PublicStatsDto getGeneralStats() {
+        long totalItems = itemRepository.count();
+        long totalCollections = collectionRepository.count();
+        long totalHalls = hallRepository.count();
+        long totalAuthors = authorRepository.count();
+
+        return new PublicStatsDto(totalItems, totalCollections, totalHalls, totalAuthors);
     }
 }

@@ -14,7 +14,7 @@ services:
       - museum_backend_dev_network
     volumes:
       - museum_backend_dev_postgres_volume:/var/lib/postgresql/data
-#      - ./postgres_data/initial_postgres_data.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./postgres_data/initial_postgres_data.sql:/docker-entrypoint-initdb.d/init.sql
 
 networks:
   museum_backend_dev_network:

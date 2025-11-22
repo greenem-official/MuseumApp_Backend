@@ -58,11 +58,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             }
         }
 
-        Authentication authBefore = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println("BEFORE CHAIN:");
-        System.out.println("Principal: " + (authBefore != null ? authBefore.getPrincipal() : null));
-        System.out.println("Authorities: " + (authBefore != null ? authBefore.getAuthorities() : null));
-        System.out.println("Authenticated: " + (authBefore != null ? authBefore.isAuthenticated() : null));
+//        Authentication authBefore = SecurityContextHolder.getContext().getAuthentication();
+//        System.out.println("BEFORE CHAIN:");
+//        System.out.println("Principal: " + (authBefore != null ? authBefore.getPrincipal() : null));
+//        System.out.println("Authorities: " + (authBefore != null ? authBefore.getAuthorities() : null));
+//        System.out.println("Authenticated: " + (authBefore != null ? authBefore.isAuthenticated() : null));
 
         filterChain.doFilter(request, response);
     }

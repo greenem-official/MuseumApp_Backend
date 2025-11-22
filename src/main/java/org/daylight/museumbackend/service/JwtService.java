@@ -1,8 +1,11 @@
 package org.daylight.museumbackend.service;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -12,14 +15,20 @@ import java.util.Date;
 
 @Service
 public class JwtService {
-    private static final String SECRET = "ОченьДлинныйСекретныйКлючМинимум32Байта!!!"; // TODO move to application.properties
-    private final SecretKey key = Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
+    private final SecretKey key;
+
+    @Value("${jwt.expiration}")
+    private long expirationMs;
+
+    public JwtService(@Value("${jwt.secret}") String secret) {
+        this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+    }
 
     public String generateToken(UserDetails user) {
         return Jwts.builder()
                 .subject(user.getUsername())
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + 86400000)) // 24 hours
+                .expiration(new Date(System.currentTimeMillis() + expirationMs)) // 86400000 = 24 hours
                 .signWith(key, Jwts.SIG.HS256)
                 .compact();
     }
@@ -39,8 +48,27 @@ public class JwtService {
         }
     }
 
+    public Claims extractAllClaims(String token) {
+        return Jwts.parser()
+                .verifyWith(key)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+    }
+
+
     public boolean validate(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return username != null && username.equals(userDetails.getUsername());
+        try {
+            Claims claims = extractAllClaims(token);
+
+            String username = claims.getSubject();
+            Date expiration = claims.getExpiration();
+
+            return username.equals(userDetails.getUsername())
+                    && expiration.after(new Date());
+
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
     }
 }

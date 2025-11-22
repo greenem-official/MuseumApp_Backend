@@ -1,10 +1,7 @@
 package org.daylight.museumbackend.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.daylight.museumbackend.dto.ApiError;
-import org.daylight.museumbackend.dto.AuthResponse;
-import org.daylight.museumbackend.dto.LoginRequest;
-import org.daylight.museumbackend.dto.RegisterRequest;
+import org.daylight.museumbackend.dto.*;
 import org.daylight.museumbackend.model.User;
 import org.daylight.museumbackend.repository.UserRepository;
 import org.daylight.museumbackend.service.JwtService;
@@ -17,10 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -72,5 +66,14 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(new ApiError("Неверный логин или пароль", "BAD_CREDENTIALS"));
         }
+    }
+
+    @GetMapping("/check_token")
+    public ResponseEntity<TokenCheckResponse> checkToken(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new TokenCheckResponse(false, "Token invalid or expired"));
+        }
+        return ResponseEntity.ok(new TokenCheckResponse(true, "Token valid"));
     }
 }

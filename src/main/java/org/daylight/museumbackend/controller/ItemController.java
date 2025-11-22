@@ -3,6 +3,7 @@ package org.daylight.museumbackend.controller;
 import lombok.RequiredArgsConstructor;
 import org.daylight.museumbackend.model.Item;
 import org.daylight.museumbackend.repository.ItemRepository;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,7 @@ public class ItemController {
 
     private final ItemRepository itemRepository;
 
+    @PreAuthorize("hasRole('VISITOR')")
     @GetMapping
     public List<Item> getAll(@AuthenticationPrincipal UserDetails user) {
         System.out.println("User = " + user.getUsername());

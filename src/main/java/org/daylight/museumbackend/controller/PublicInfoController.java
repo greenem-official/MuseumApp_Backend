@@ -27,7 +27,7 @@ public class PublicInfoController {
     private final HallRepository hallRepository;
     private final AuthorRepository authorRepository;
 
-    @PreAuthorize("hasRole('ANONYMOUS') or hasRole('VISITOR')")
+    @PreAuthorize("hasRole('ANONYMOUS') or hasRole('VISITOR') or hasRole('EMPLOYEE') or hasRole('ADMIN')")
     @GetMapping("/general_stats")
     public PublicStatsDto getGeneralStats() {
         long totalItems = itemRepository.count();

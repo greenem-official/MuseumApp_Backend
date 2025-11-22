@@ -23,3 +23,7 @@ logging:
     org:
       springframework:
         security: DEBUG
+
+jwt:
+  secret: g3645g663g6jkg6jkg645kgki2562uig62ilg63lk6g
+  expiration: 86400000

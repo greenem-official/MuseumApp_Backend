@@ -2,8 +2,10 @@ package org.daylight.museumbackend.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.daylight.museumbackend.dto.PagedResult;
-import org.daylight.museumbackend.model.Item;
-import org.daylight.museumbackend.repository.ItemRepository;
+import org.daylight.museumbackend.model.Author;
+import org.daylight.museumbackend.model.Hall;
+import org.daylight.museumbackend.repository.AuthorRepository;
+import org.daylight.museumbackend.repository.HallRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,20 +15,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/items")
+@RequestMapping("/authors")
 @RequiredArgsConstructor
-public class ItemController {
-    private final ItemRepository itemRepository;
+public class AuthorController {
+    private final AuthorRepository authorRepository;
 
     @PreAuthorize("hasRole('VISITOR')")
     @GetMapping
-    public PagedResult<Item> getAll(@AuthenticationPrincipal UserDetails user) {
-        Page<Item> page = itemRepository.findAll(PageRequest.of(0, 10));
-//        for
-        System.out.println("itemRepository size: " + itemRepository.count());
+    public PagedResult<Author> getAll(@AuthenticationPrincipal UserDetails user) {
+        Page<Author> page = authorRepository.findAll(PageRequest.of(0, 10));
         return new PagedResult<>(page);
     }
 }

@@ -12,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,7 +23,7 @@ public class HallController {
     private final HallRepository hallRepository;
 
     @PreAuthorize("hasRole('VISITOR')")
-    @GetMapping
+    @PostMapping
     public PagedResult<Hall> getAll(@AuthenticationPrincipal UserDetails user) {
         Page<Hall> page = hallRepository.findAll(PageRequest.of(0, 10));
         return new PagedResult<>(page);

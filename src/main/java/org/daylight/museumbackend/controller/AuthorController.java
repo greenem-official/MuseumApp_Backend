@@ -12,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,7 +23,7 @@ public class AuthorController {
     private final AuthorRepository authorRepository;
 
     @PreAuthorize("hasRole('VISITOR')")
-    @GetMapping
+    @PostMapping
     public PagedResult<Author> getAll(@AuthenticationPrincipal UserDetails user) {
         Page<Author> page = authorRepository.findAll(PageRequest.of(0, 10));
         return new PagedResult<>(page);

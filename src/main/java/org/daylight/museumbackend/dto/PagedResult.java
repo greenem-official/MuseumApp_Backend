@@ -10,13 +10,15 @@ import java.util.List;
 public class PagedResult<T> {
     private List<T> items;
     private int page;
-    private int totalPages;
-    private long totalElements;
+    private int size;
+    private final long totalItems;
+    private final int totalPages;
 
     public PagedResult(Page<T> page) {
         this.items = page.getContent();
         this.page = page.getNumber();
+        this.size = page.getSize();
+        this.totalItems = page.getTotalElements();
         this.totalPages = page.getTotalPages();
-        this.totalElements = page.getTotalElements();
     }
 }

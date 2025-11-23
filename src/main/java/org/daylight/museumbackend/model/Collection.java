@@ -1,14 +1,17 @@
 package org.daylight.museumbackend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.time.LocalDate;
 import java.util.List;
 
+@Getter
 @Entity
 @Table(name = "collections")
 public class Collection {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,5 +30,6 @@ public class Collection {
     private LocalDate endDate;
 
     @OneToMany(mappedBy = "collection")
+    @JsonBackReference
     private List<Item> items;
 }

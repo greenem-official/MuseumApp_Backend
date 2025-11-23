@@ -1,11 +1,12 @@
 package org.daylight.museumbackend.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
+@Getter
 @Entity
 @Table(name = "halls")
 public class Hall {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

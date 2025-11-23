@@ -1,11 +1,14 @@
 package org.daylight.museumbackend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import lombok.Getter;
 
+@Getter
 @Entity
 @Table(name = "items")
 public class Item {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,6 +26,7 @@ public class Item {
 
     @ManyToOne
     @JoinColumn(name = "collection_id")
+    @JsonManagedReference
     private Collection collection;
 
     @ManyToOne

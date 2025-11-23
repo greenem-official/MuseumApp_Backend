@@ -1,8 +1,11 @@
 package org.daylight.museumbackend.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.daylight.museumbackend.dto.PagedResult;
 import org.daylight.museumbackend.model.Item;
 import org.daylight.museumbackend.repository.ItemRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,8 +24,10 @@ public class ItemController {
 
     @PreAuthorize("hasRole('VISITOR')")
     @GetMapping
-    public List<Item> getAll(@AuthenticationPrincipal UserDetails user) {
-        System.out.println("User = " + user.getUsername());
-        return itemRepository.findAll();
+    public PagedResult<Item> getAll(@AuthenticationPrincipal UserDetails user) {
+        Page<Item> page = itemRepository.findAll(PageRequest.of(0, 10));
+//        for
+        System.out.println("itemRepository size: " + itemRepository.count());
+        return new PagedResult<>(page);
     }
 }

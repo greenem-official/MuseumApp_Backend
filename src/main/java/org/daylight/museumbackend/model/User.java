@@ -2,7 +2,9 @@ package org.daylight.museumbackend.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
 
+@Getter
 @Entity
 @Data
 @Table(name = "users")

@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CollectionController {
     private final CollectionRepository collectionRepository;
 
-    @PreAuthorize("hasRole('VISITOR')")
+    @PreAuthorize("hasRole('VISITOR') or hasRole('EMPLOYEE') or hasRole('ADMIN')")
     @PostMapping
     public PagedResult<Collection> getAll(@AuthenticationPrincipal UserDetails user) {
         Page<Collection> page = collectionRepository.findAll(PageRequest.of(0, 10));

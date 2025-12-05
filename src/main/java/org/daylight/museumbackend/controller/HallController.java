@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class HallController {
     private final HallRepository hallRepository;
 
-    @PreAuthorize("hasRole('VISITOR')")
+    @PreAuthorize("hasRole('VISITOR') or hasRole('EMPLOYEE') or hasRole('ADMIN')")
     @PostMapping
     public PagedResult<Hall> getAll(@AuthenticationPrincipal UserDetails user) {
         Page<Hall> page = hallRepository.findAll(PageRequest.of(0, 10));

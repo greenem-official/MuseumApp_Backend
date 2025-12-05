@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthorController {
     private final AuthorRepository authorRepository;
 
-    @PreAuthorize("hasRole('VISITOR')")
+    @PreAuthorize("hasRole('VISITOR') or hasRole('EMPLOYEE') or hasRole('ADMIN')")
     @PostMapping
     public PagedResult<Author> getAll(@AuthenticationPrincipal UserDetails user) {
         Page<Author> page = authorRepository.findAll(PageRequest.of(0, 10));

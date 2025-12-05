@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemSpecificationBuilder {
-
     public static Specification<Item> build(PagedRequest request) {
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
@@ -29,17 +28,17 @@ public class ItemSpecificationBuilder {
                     Class<?> javaType = path.getJavaType();
 
                     if (Comparable.class.isAssignableFrom(javaType)) {
-                        if (f.getFrom() != null) {
+                        if (f.getMin() != null) {
                             predicates.add(cb.greaterThanOrEqualTo(
                                     path.as((Class<? extends Comparable>) javaType),
-                                    (Comparable) convert(f.getFrom(), javaType)
+                                    (Comparable) convert(f.getMin(), javaType)
                             ));
                         }
 
-                        if (f.getTo() != null) {
+                        if (f.getMax() != null) {
                             predicates.add(cb.lessThanOrEqualTo(
                                     path.as((Class<? extends Comparable>) javaType),
-                                    (Comparable) convert(f.getTo(), javaType)
+                                    (Comparable) convert(f.getMax(), javaType)
                             ));
                         }
                     }

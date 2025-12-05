@@ -4,8 +4,7 @@ import lombok.Getter;
 import org.daylight.museumbackend.filterrelated.FilterRule;
 
 @Getter
-public class RangeFilter implements FilterRule {
+public class EndsWithFilter implements FilterRule {
     private String field;
-    private Object min;
-    private Object max;
+    private String value;
 }
